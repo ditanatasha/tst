@@ -20,14 +20,10 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-        "disabled": False
-    },
     "asdf": {
         "username": "asdf",
-        "hashed_password": "asdf",
+        #hash password dari asdf menggunakan bcrypt
+        "hashed_password": "$2b$12$0N/wa1cM7wvKeKGXgrJsj.R0hlLoRVRDNxyHpBRdvtdk/46IWNTRm",
         "disabled": False
     }
 }
@@ -128,7 +124,7 @@ async def root(): # Python function. The use of async is optional.
     return {"Hello": "World"}
 
 @app.get('/menu/{item_id}')
-async def read_menu(item_id: int):
+async def read_menu(item_id: int, current_user: User = Depends(get_current_active_user)):
       for menu_item in data['menu']:
             if menu_item['id'] == item_id:
                 return menu_item
@@ -137,7 +133,7 @@ async def read_menu(item_id: int):
       )
 
 @app.post('/menu/{name}')
-async def post_menu(name: str):
+async def post_menu(name: str, current_user: User = Depends(get_current_active_user)):
     id=1
     if(len(data["menu"])>0):
         id = data["menu"][len(data["menu"])-1]["id"]+1
@@ -156,7 +152,7 @@ async def post_menu(name: str):
     )
 
 @app.put('/menu/{item_id}/{name}')
-async def update_menu(item_id: int, name: str):
+async def update_menu(item_id: int, name: str, current_user: User = Depends(get_current_active_user)):
       for menu_item in data['menu']:
             if menu_item['id'] == item_id:
                 menu_item['name'] = name
@@ -171,7 +167,7 @@ async def update_menu(item_id: int, name: str):
       )
 
 @app.delete('/menu/{item_id}')
-async def delete_menu(item_id: int):
+async def delete_menu(item_id: int, current_user: User = Depends(get_current_active_user)):
       for menu_item in data['menu']:
             if menu_item['id'] == item_id:
                 data["menu"].remove(menu_item)
