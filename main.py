@@ -121,7 +121,7 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 
 @app.get("/")  # define path operation decorator.
 async def root(): # Python function. The use of async is optional.
-    return {"Hello": "World"}
+    return {"Hello!": "Welcome to 18219018 FastApi. Please add '/docs' at the end of this url."}
 
 @app.get('/menu/{item_id}')
 async def read_menu(item_id: int, current_user: User = Depends(get_current_active_user)):
